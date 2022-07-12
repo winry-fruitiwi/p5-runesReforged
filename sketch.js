@@ -33,12 +33,14 @@ function setup() {
 function gotData(data) {
     // iterate through all the paths in our data
     for (let paths of data) {
-        // iterate through paths["slots"][0]["runes"], where paths["slots"][0]
-        // represents the first runes attribute. Accessing the runes attribute
-        // will allow access of the current keystone.
-        for (let keystone of paths["slots"][0]["runes"]) {
-            console.log(keystone["key"])
+        // iterate through the slots in the current path
+        for (let runes of paths["slots"]) {
+            // iterate through the runes of each path, and output the key
+            for (let rune of runes["runes"]) {
+                print(rune["key"])
+            }
         }
+        // whitespace between each rune page
         console.log("\n\n\n")
     }
 }
