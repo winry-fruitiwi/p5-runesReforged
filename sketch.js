@@ -26,8 +26,22 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    loadJSON("https://ddragon.leagueoflegends.com/cdn/12.12.1/data/en_US/runesReforged.json", gotData)
 }
 
+function gotData(data) {
+    // iterate through all the paths in our data
+    for (let paths of data) {
+        // iterate through paths["slots"][0]["runes"], where paths["slots"][0]
+        // represents the first runes attribute. Accessing the runes attribute
+        // will allow access of the current keystone.
+        for (let keystone of paths["slots"][0]["runes"]) {
+            console.log(keystone["key"])
+        }
+        console.log("\n\n\n")
+    }
+}
 
 function draw() {
     background(234, 34, 24)
