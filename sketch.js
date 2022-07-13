@@ -1,6 +1,30 @@
 /**
  *  @author 
- *  @date 2022.
+ *  @date 2022.07.12
+ *
+ * A list of unneeded exceptions to the file structure in canisback.com
+ *
+ * Domination:
+ *    Taste of Blood - GreenTerror_TasteOfBlood.png
+ *
+ * Inspiration:
+ *    ApproachVelocity - missing
+ *    Certain obsolete runes, like Kleptomancy
+ *
+ * Precision:
+ *    LethalTempo - LethalTempoTemp.png ☒
+ *    Overheal - No directory
+ *    Triumph - No directory
+ *
+ * Resolve:
+ *    Aftershock - VeteranAftershock/VeteranAftershock.png
+ *
+ * Sorcery:
+ *    Celerity - CelerityTemp.png
+ *    LastStand should be in Precision
+ *    NimbusCloak - 6361.png, must have been an item previously
+ *    NullifyingOrb - Pokeshield.png
+ *    Unflinching should be in Resolve
  *
  */
 
@@ -27,17 +51,28 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
-    loadJSON("https://ddragon.leagueoflegends.com/cdn/12.12.1/data/en_US/runesReforged.json", gotData)
+    loadJSON("https://ddragon.canisback.com/12.12.1/data/en_US/runesReforged.json", gotData)
 }
 
 function gotData(data) {
+    let baseImgPath = "https://ddragon.canisback.com/img/perk-images/Styles/"
+
     // iterate through all the paths in our data
     for (let paths of data) {
         // iterate through the slots in the current path
         for (let runes of paths["slots"]) {
             // iterate through the runes of each path, and output the key
             for (let rune of runes["runes"]) {
+                let runeKey = rune["key"]
+
                 print(rune["key"])
+
+                // There are a lot of exceptions to this, most notably
+                // Unflinching in Sorcery instead of Guardian. The JSON no
+                // longer has out-of-date runes, but Canisback needs to
+                // update because the photos are wrong there. Before that
+                // though I'll need to make a bunch of exceptions for runes.
+                print(`${baseImgPath}${paths["key"]}/${runeKey}/${runeKey}.png`)
             }
         }
         // whitespace between each rune page
