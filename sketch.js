@@ -31,7 +31,11 @@
 let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
+let runeImageList = []
+let runeImageListIndex
 
+// our current rune image
+let currentRuneImage
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -55,8 +59,6 @@ function setup() {
 }
 
 function gotData(data) {
-    let baseImgPath = "https://ddragon.canisback.com/img/perk-images/Styles/"
-
     // iterate through all the paths in our data
     for (let paths of data) {
         // iterate through the slots in the current path
@@ -67,21 +69,31 @@ function gotData(data) {
 
                 print(runeKey)
 
-                print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
+                // fetch the image of the current rune
+                runeImageList.push(`https://ddragon.canisback.com/img/${rune["icon"]}`)
             }
         }
         // whitespace between each rune page
         console.log("\n\n\n")
     }
+
+    // set the rune image list index to a random image
+    runeImageListIndex = int(random(0, runeImageList.length))
+
+    currentRuneImage = loadImage(runeImageList[runeImageListIndex])
+
+    print(runeImageList[runeImageListIndex])
 }
 
 function draw() {
     background(234, 34, 24)
 
+    image(currentRuneImage, 0, 0)
+
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    debugCorner.show()
+    // debugCorner.show()
 
     if (frameCount > 3000)
         noLoop()
