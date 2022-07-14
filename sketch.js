@@ -65,14 +65,9 @@ function gotData(data) {
             for (let rune of runes["runes"]) {
                 let runeKey = rune["key"]
 
-                print(rune["key"])
+                print(runeKey)
 
-                // There are a lot of exceptions to this, most notably
-                // Unflinching in Sorcery instead of Guardian. The JSON no
-                // longer has out-of-date runes, but Canisback needs to
-                // update because the photos are wrong there. Before that
-                // though I'll need to make a bunch of exceptions for runes.
-                print(`${baseImgPath}${paths["key"]}/${runeKey}/${runeKey}.png`)
+                print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
             }
         }
         // whitespace between each rune page
