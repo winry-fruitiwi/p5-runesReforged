@@ -37,6 +37,9 @@ let runeImageListIndex
 // our current rune image
 let currentRuneImage
 
+// image size, imageSize by imageSize
+let imageSize = 20
+
 function preload() {
     font = loadFont('data/consola.ttf')
 }
@@ -44,6 +47,7 @@ function preload() {
 
 function setup() {
     let cnv = createCanvas(600, 300)
+
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
     textFont(font, 14)
@@ -55,12 +59,16 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
+    // background(234, 34, 24)
+
     loadJSON("https://ddragon.canisback.com/12.12.1/data/en_US/runesReforged.json", gotData)
 }
 
 function gotData(data) {
     // iterate through all the paths in our data
     for (let paths of data) {
+        runeImageList.push(loadImage(`https://ddragon.canisback.com/img/${paths["icon"]}`))
+
         // iterate through the slots in the current path
         for (let runes of paths["slots"]) {
             // iterate through the runes of each path, and output the key
@@ -69,26 +77,39 @@ function gotData(data) {
 
                 print(runeKey)
 
+                print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
+
+                let runeImage = loadImage(`https://ddragon.canisback.com/img/${rune["icon"]}`)
+
                 // fetch the image of the current rune
-                runeImageList.push(`https://ddragon.canisback.com/img/${rune["icon"]}`)
+                runeImageList.push(runeImage)
+
+                // runeImage.width = imageSize
+                // runeImage.height = imageSize
+                //
+                // image(runeImage, 0, 0)
             }
         }
         // whitespace between each rune page
         console.log("\n\n\n")
     }
-
-    // set the rune image list index to a random image
-    runeImageListIndex = int(random(0, runeImageList.length))
-
-    currentRuneImage = loadImage(runeImageList[runeImageListIndex])
-
-    print(runeImageList[runeImageListIndex])
+    //
+    // // set the rune image list index to a random image
+    // runeImageListIndex = int(random(0, runeImageList.length))
+    //
+    // currentRuneImage = loadImage(runeImageList[runeImageListIndex])
+    //
+    // print(runeImageList[runeImageListIndex])
 }
 
 function draw() {
     background(234, 34, 24)
-
-    image(currentRuneImage, 0, 0)
+    //
+    // currentRuneImage.width = imageSize
+    // currentRuneImage.height = imageSize
+    //
+    // image(currentRuneImage, 0, 0)
+    //
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
@@ -97,6 +118,14 @@ function draw() {
 
     if (frameCount > 3000)
         noLoop()
+
+    for (let runeImage of runeImageList) {
+        runeImage.resize(imageSize, 0)
+
+        image(runeImage, 0, 0)
+    }
+
+    // noLoop()
 }
 
 
