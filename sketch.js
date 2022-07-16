@@ -38,7 +38,7 @@ let runeImageListIndex
 let currentRuneImage
 
 // image size, imageSize by imageSize
-let imageSize = 20
+let imageSize = 30
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -67,7 +67,13 @@ function setup() {
 function gotData(data) {
     // iterate through all the paths in our data
     for (let paths of data) {
-        runeImageList.push(loadImage(`https://ddragon.canisback.com/img/${paths["icon"]}`))
+        let currentRunePathImageList = []
+
+        currentRunePathImageList.push(
+            loadImage(
+                `https://ddragon.canisback.com/img/${paths["icon"]}`
+            )
+        )
 
         // iterate through the slots in the current path
         for (let runes of paths["slots"]) {
@@ -82,7 +88,7 @@ function gotData(data) {
                 let runeImage = loadImage(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
                 // fetch the image of the current rune
-                runeImageList.push(runeImage)
+                currentRunePathImageList.push(runeImage)
 
                 // runeImage.width = imageSize
                 // runeImage.height = imageSize
@@ -90,6 +96,8 @@ function gotData(data) {
                 // image(runeImage, 0, 0)
             }
         }
+        runeImageList.push(currentRunePathImageList)
+
         // whitespace between each rune page
         console.log("\n\n\n")
     }
@@ -119,10 +127,21 @@ function draw() {
     if (frameCount > 3000)
         noLoop()
 
-    for (let runeImage of runeImageList) {
-        runeImage.resize(imageSize, 0)
+    // the current position of each image
+    let imageXPos = 0
+    let imageYPos = 0
 
-        image(runeImage, 0, 0)
+    for (let pathRuneImage of runeImageList) {
+        for (let runeImage of pathRuneImage) {
+            runeImage.resize(imageSize, 0)
+
+            image(runeImage, imageXPos, imageYPos)
+
+            imageXPos += imageSize
+        }
+
+        imageYPos += imageSize
+        imageXPos = 0
     }
 
     // noLoop()
