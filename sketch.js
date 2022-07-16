@@ -31,7 +31,7 @@
 let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
-let runeImageList = []
+let runeImageList = {}
 let runeImageListIndex
 
 // our current rune image
@@ -50,7 +50,7 @@ function setup() {
 
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
-    textFont(font, 14)
+    textFont(font, 36)
 
     /* initialize instruction div */
     instructions = select('#ins')
@@ -81,9 +81,9 @@ function gotData(data) {
             for (let rune of runes["runes"]) {
                 let runeKey = rune["key"]
 
-                print(runeKey)
+                // print(runeKey)
 
-                print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
+                // print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
                 let runeImage = loadImage(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
@@ -96,10 +96,10 @@ function gotData(data) {
                 // image(runeImage, 0, 0)
             }
         }
-        runeImageList.push(currentRunePathImageList)
+        runeImageList[paths["key"]] = currentRunePathImageList
 
         // whitespace between each rune page
-        console.log("\n\n\n")
+        // console.log("\n\n\n")
     }
     //
     // // set the rune image list index to a random image
@@ -127,11 +127,24 @@ function draw() {
     if (frameCount > 3000)
         noLoop()
 
+    drawRuneImages()
+
+    // fill(0, 0, 100)
+    // text("hello", 0, 30)
+
+    // noLoop()
+}
+
+
+// draws all rune images
+function drawRuneImages() {
     // the current position of each image
     let imageXPos = 0
     let imageYPos = 0
 
-    for (let pathRuneImage of runeImageList) {
+    for (let pathRuneImageIndex in runeImageList) {
+        // console.log(runeImageList)
+        let pathRuneImage = runeImageList[pathRuneImageIndex]
         for (let runeImage of pathRuneImage) {
             runeImage.resize(imageSize, 0)
 
@@ -143,8 +156,6 @@ function draw() {
         imageYPos += imageSize
         imageXPos = 0
     }
-
-    // noLoop()
 }
 
 
