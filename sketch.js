@@ -40,6 +40,9 @@ let currentRuneImage
 // image size, imageSize by imageSize
 let imageSize = 30
 
+// margin between images
+let imageYMargin = 10
+
 function preload() {
     font = loadFont('data/consola.ttf')
 }
@@ -139,7 +142,7 @@ function drawRuneImages() {
             imageXPos += imageSize
         }
 
-        imageYPos += imageSize
+        imageYPos += imageSize + imageYMargin
         imageXPos = 0
     }
 }
