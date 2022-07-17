@@ -46,11 +46,11 @@ function preload() {
 
 
 function setup() {
-    let cnv = createCanvas(600, 300)
+    let cnv = createCanvas(1200, 600)
 
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
-    textFont(font, 36)
+    textFont(font, 26)
 
     /* initialize instruction div */
     instructions = select('#ins')
@@ -59,10 +59,9 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
-    // background(234, 34, 24)
-
     loadJSON("https://ddragon.canisback.com/12.12.1/data/en_US/runesReforged.json", gotData)
 }
+
 
 function gotData(data) {
     // iterate through all the paths in our data
@@ -79,36 +78,17 @@ function gotData(data) {
         for (let runes of paths["slots"]) {
             // iterate through the runes of each path, and output the key
             for (let rune of runes["runes"]) {
-                let runeKey = rune["key"]
-
-                // print(runeKey)
-
-                // print(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
                 let runeImage = loadImage(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
                 // fetch the image of the current rune
                 currentRunePathImageList.push(runeImage)
-
-                // runeImage.width = imageSize
-                // runeImage.height = imageSize
-                //
-                // image(runeImage, 0, 0)
             }
         }
         runeImageList[paths["key"]] = currentRunePathImageList
-
-        // whitespace between each rune page
-        // console.log("\n\n\n")
     }
-    //
-    // // set the rune image list index to a random image
-    // runeImageListIndex = int(random(0, runeImageList.length))
-    //
-    // currentRuneImage = loadImage(runeImageList[runeImageListIndex])
-    //
-    // print(runeImageList[runeImageListIndex])
 }
+
 
 function draw() {
     background(234, 34, 24)
@@ -145,6 +125,12 @@ function drawRuneImages() {
     for (let pathRuneImageIndex in runeImageList) {
         // console.log(runeImageList)
         let pathRuneImage = runeImageList[pathRuneImageIndex]
+
+        fill(0, 0, 100)
+        text(pathRuneImageIndex, imageXPos, imageYPos + textAscent())
+
+        imageYPos += textAscent()
+
         for (let runeImage of pathRuneImage) {
             runeImage.resize(imageSize, 0)
 
