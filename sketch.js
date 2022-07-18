@@ -1,5 +1,5 @@
 /**
- *  @author 
+ *  @author
  *  @date 2022.07.12
  *
  * A list of unneeded exceptions to the file structure in canisback.com
@@ -32,16 +32,17 @@ let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 let runeImageList = {}
-let runeImageListIndex
 
-// our current rune image
-let currentRuneImage
+// a list of rune path images, such as the harp-like symbol for Resolve
+let runePathIdentifierImgList = {}
 
-// image size, imageSize by imageSize
-let imageSize = 30
+// image size, imageSize by imageSize. 24 just happens to cover the entire
+// screen, so I'll keep it for now.
+
+let imageSize = 24
 
 // margin between images
-let imageYMargin = 10
+let runeBlockMargin = 5
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -71,24 +72,25 @@ function gotData(data) {
     for (let paths of data) {
         let currentRunePathImageList = []
 
-        currentRunePathImageList.push(
-            loadImage(
-                `https://ddragon.canisback.com/img/${paths["icon"]}`
-            )
-        )
-
         // iterate through the slots in the current path
         for (let runes of paths["slots"]) {
+            // keep track of the current row of runes
+            let currentRuneRowImageList = []
+
             // iterate through the runes of each path, and output the key
             for (let rune of runes["runes"]) {
 
                 let runeImage = loadImage(`https://ddragon.canisback.com/img/${rune["icon"]}`)
 
                 // fetch the image of the current rune
-                currentRunePathImageList.push(runeImage)
+                currentRuneRowImageList.push(runeImage)
             }
+            currentRunePathImageList.push(currentRuneRowImageList)
         }
         runeImageList[paths["key"]] = currentRunePathImageList
+        runePathIdentifierImgList[paths["key"]] = loadImage(
+            `https://ddragon.canisback.com/img/${paths["icon"]}`
+        )
     }
 }
 
@@ -127,23 +129,36 @@ function drawRuneImages() {
 
     for (let pathRuneImageIndex in runeImageList) {
         // console.log(runeImageList)
-        let pathRuneImage = runeImageList[pathRuneImageIndex]
+        let pathRuneImageRows = runeImageList[pathRuneImageIndex]
 
         fill(0, 0, 100)
         text(pathRuneImageIndex, imageXPos, imageYPos + textAscent())
 
+        let pathRuneImage = runePathIdentifierImgList[pathRuneImageIndex]
+        pathRuneImage.resize(0, textAscent())
+
+        image(
+            pathRuneImage,
+            textWidth(pathRuneImageIndex),
+            imageYPos
+        )
+
         imageYPos += textAscent()
 
-        for (let runeImage of pathRuneImage) {
-            runeImage.resize(imageSize, 0)
+        for (let pathRuneImages of pathRuneImageRows) {
+            for (let runeImage of pathRuneImages) {
+                runeImage.resize(imageSize, 0)
 
-            image(runeImage, imageXPos, imageYPos)
+                image(runeImage, imageXPos, imageYPos)
 
-            imageXPos += imageSize
+                imageXPos += imageSize
+            }
+
+        imageYPos += imageSize
+        imageXPos = 0
         }
 
-        imageYPos += imageSize + imageYMargin
-        imageXPos = 0
+        imageYPos += runeBlockMargin
     }
 }
 
