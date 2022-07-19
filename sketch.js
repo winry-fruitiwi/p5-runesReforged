@@ -39,7 +39,7 @@ let runePathIdentifierImgList = {}
 // image size, imageSize by imageSize. 24 just happens to cover the entire
 // screen, so I'll keep it for now.
 
-let imageSize = 24
+let imageSize = 20
 
 // margin between images
 let runeBlockMargin = 5
@@ -54,7 +54,7 @@ function setup() {
 
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
-    textFont(font, 26)
+    textFont(font, 100)
 
     /* initialize instruction div */
     instructions = select('#ins')
@@ -132,18 +132,18 @@ function drawRuneImages() {
         let pathRuneImageRows = runeImageList[pathRuneImageIndex]
 
         fill(0, 0, 100)
-        text(pathRuneImageIndex, imageXPos, imageYPos + textAscent())
+        text(pathRuneImageIndex, imageXPos + 4 * imageSize, imageYPos + textAscent())
 
         let pathRuneImage = runePathIdentifierImgList[pathRuneImageIndex]
         pathRuneImage.resize(0, textAscent())
 
         image(
             pathRuneImage,
-            textWidth(pathRuneImageIndex),
+            textWidth(pathRuneImageIndex) + 4 * imageSize,
             imageYPos
         )
 
-        imageYPos += textAscent()
+        // imageYPos += textAscent()
 
         for (let pathRuneImages of pathRuneImageRows) {
             for (let runeImage of pathRuneImages) {
