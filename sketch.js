@@ -38,8 +38,10 @@ let runePathIdentifierImgList = {}
 
 // image size, imageSize by imageSize. 24 just happens to cover the entire
 // screen, so I'll keep it for now.
-
 let imageSize = 20
+
+// rune path banner margin
+let runePathBannerMargin = 10
 
 // margin between images
 let runeBlockMargin = 5
@@ -62,6 +64,8 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    textAlign(LEFT)
 
     loadJSON("https://ddragon.canisback.com/12.12.1/data/en_US/runesReforged.json", gotData)
 }
@@ -124,22 +128,26 @@ function draw() {
 // draws all rune images
 function drawRuneImages() {
     // the current position of each image
-    let imageXPos = 0
-    let imageYPos = 0
+    let imageXPos = 10
+    let imageYPos = 10
 
     for (let pathRuneImageIndex in runeImageList) {
         // console.log(runeImageList)
         let pathRuneImageRows = runeImageList[pathRuneImageIndex]
 
         fill(0, 0, 100)
-        text(pathRuneImageIndex, imageXPos + 4 * imageSize, imageYPos + textAscent())
+        text(
+            pathRuneImageIndex,
+            imageXPos + 4 * imageSize + runePathBannerMargin,
+            imageYPos + textAscent()
+        )
 
         let pathRuneImage = runePathIdentifierImgList[pathRuneImageIndex]
         pathRuneImage.resize(0, textAscent())
 
         image(
             pathRuneImage,
-            textWidth(pathRuneImageIndex) + 4 * imageSize,
+            textWidth(pathRuneImageIndex) + 4 * imageSize + imageXPos + runePathBannerMargin * 2,
             imageYPos
         )
 
@@ -155,7 +163,7 @@ function drawRuneImages() {
             }
 
         imageYPos += imageSize
-        imageXPos = 0
+        imageXPos = 10
         }
 
         imageYPos += runeBlockMargin
